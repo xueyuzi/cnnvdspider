@@ -18,14 +18,15 @@ class VulnerabilitySpider(CrawlSpider):
         details = response.xpath("//table[@class='details']")
         item['CNNVD_id'] = details.xpath("tr[2]/td[2]/text()").extract()
         item['CVE_id'] = details.xpath("tr[8]/td[2]/a/text()").extract()
-        # item['level']
+        item['level'] = details.xpath("tr[5]/td[2]/a/text()").extract()
         item['vulnerability_name'] = details.xpath("tr[1]/td[2]/text()").extract()
         item['vulnerability_type'] = details.xpath("tr[6]/td[2]/a/text()").extract()
         item['vulnerability_source'] = details.xpath("tr[9]/td[2]/text()").extract()
         item['vulnerability_detail'] = response.xpath("//table[@width='100%']/tr[2]/td/div/p[1]/text()").extract()
         item['vulnerability_notice'] = response.xpath("//table[@width='100%']/tr[3]/td/div/p[1]/text()").extract() + response.xpath("//table[@width='100%']/tr[3]/td/div/p[1]/a/text()").extract()
         item['threat_type'] = details.xpath("tr[7]/td[2]/a/text()").extract()
-        # item['reference_site']
+        reference_data = response.xpath("//table[@width='100%']/tr[4]/td/div/table/tr/td/p")
+        item['reference_site'] = reference_data.xpath('string(.)').extract()
         item['release_time'] = details.xpath("tr[3]/td[2]/a/text()").extract()
         item['update_time'] = details.xpath("tr[4]/td[2]/a/text()").extract()
         return item
